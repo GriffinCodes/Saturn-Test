@@ -1,0 +1,35 @@
+name: Zip
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Set outputs
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+          
+      - name: Upload a Build Artifact    
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: Saturn-${{ steps.vars.outputs.sha_short }}.zip
+          path: |
+            assets/
+            pack.mcmeta
+            pack.png
+          if-no-files-found: error
